@@ -1,6 +1,6 @@
 def read_input(filename):
     with open(filename) as f:
-        input = f.readlines()
+        input = f.read().splitlines()
     return input
 
 def get_folder_name():
