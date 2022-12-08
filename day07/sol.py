@@ -32,7 +32,10 @@ def get_directories(input):
         elif line.startswith("dir"):
             dirs[add_dir_to_path(path, args[1])] = 0
         elif args[0].isnumeric():
-            dirs_list = path.split("/")
+            if path == "/":
+                dirs_list = [""]
+            else:
+                dirs_list = path.split("/")
             # print(dirs_list)
             d_path = ""
             for d in dirs_list:
