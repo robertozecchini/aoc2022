@@ -7,9 +7,9 @@ def get_folder_name():
     folders = __file__.split('/')
     return folders[-2]
 
-def search_start_of_packet(datastream):
-    for i in range(4, len(datastream)):
-        if len(set(datastream[i-4:i])) == 4:
+def search_start_of_packet(datastream, marker_len = 4):
+    for i in range(marker_len, len(datastream)):
+        if len(set(datastream[i-marker_len:i])) == marker_len:
             return i
     return 0
 
@@ -20,7 +20,10 @@ def sol1(input):
     return sol
 
 def sol2(input):
-    pass
+    sol = []
+    for line in input:
+        sol.append(search_start_of_packet(line, 14))
+    return sol
 
 if __name__ == "__main__":
     input = read_input(f"{get_folder_name()}/input")

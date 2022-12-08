@@ -10,7 +10,7 @@ class TestSol(unittest.TestCase):
     def setUp(self):
         self.input = read_input(f"{get_folder_name()}/test_input")
         self.expected1 = [7, 5, 6, 10, 11]
-        self.expected2 = 0
+        self.expected2 = [19, 23, 23, 29, 26]
     def test_sol1(self):
         result = sol1(self.input)
         self.assertEqual(result, self.expected1)
