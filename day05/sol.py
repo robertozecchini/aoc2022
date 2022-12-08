@@ -51,18 +51,22 @@ def get_top_list(stacks):
 
 def sol1(input):
     stacks, moves = get_data_from_input(input)
-    # print(stacks)
-    # print(get_top_list(stacks))
     for m in moves:
         for it in range(m["move"]):
             crate = stacks[m["from"]].pop()
             stacks[m["to"]].append(crate)
-        # print(stacks)
-    # print(get_top_list(stacks))
     return get_top_list(stacks)
 
 def sol2(input):
-    pass
+    stacks, moves = get_data_from_input(input)
+    for m in moves:
+        crates_num = m["move"]
+        stack_from = m["from"]
+        stack_to = m["to"]
+        crates_to_move = stacks[stack_from][-crates_num:]
+        stacks[stack_from] = stacks[stack_from][:-crates_num]
+        stacks[stack_to].extend(crates_to_move)
+    return get_top_list(stacks)
 
 if __name__ == "__main__":
     input = read_input(f"{get_folder_name()}/input")

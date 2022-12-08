@@ -10,7 +10,7 @@ class TestSol(unittest.TestCase):
     def setUp(self):
         self.input = read_input(f"{get_folder_name()}/test_input")
         self.expected1 = "CMZ"
-        self.expected2 = 0
+        self.expected2 = "MCD"
     def test_sol1(self):
         result = sol1(self.input)
         self.assertEqual(result, self.expected1)
