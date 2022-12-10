@@ -9,13 +9,14 @@ from sol import read_input
 class TestSol(unittest.TestCase):
     def setUp(self):
         self.input = read_input(f"{get_folder_name()}/test_input")
+        self.input2 = read_input(f"{get_folder_name()}/test_input2")
         self.expected1 = 13
-        self.expected2 = 0
+        self.expected2 = 36
     def test_sol1(self):
         result = sol1(self.input)
         self.assertEqual(result, self.expected1)
     def test_sol2(self):
-        result = sol2(self.input)
+        result = sol2(self.input2)
         self.assertEqual(result, self.expected2)
 
 if __name__ == '__main__':

@@ -9,8 +9,12 @@ def get_folder_name():
 
 class Rope:
     def __init__(self):
+        self.tails_count = 9
         self.head_pos = [0, 0]
         self.tail_pos = [0, 0]
+        self.tails_pos = []
+        for i in range(self.tails_count+1):
+            self.tails_pos.append([0, 0])
         self.history = []
     def translate_dir(self, dir_str):
         if dir_str == "U":
@@ -28,18 +32,26 @@ class Rope:
         dir = self.translate_dir(dir_str)
         for i in range(steps):
             self.head_pos = [self.head_pos[0] + dir[0], self.head_pos[1] + dir[1]]
-            tail_distance = (self.head_pos[0]-self.tail_pos[0], self.head_pos[1]-self.tail_pos[1])
-            if tail_distance[0] == 2:
-                self.tail_pos = [self.head_pos[0] - 1, self.head_pos[1]]
-            elif tail_distance[0] == -2:
-                self.tail_pos = [self.head_pos[0] + 1, self.head_pos[1]]
-            elif tail_distance[1] == 2:
-                self.tail_pos = [self.head_pos[0], self.head_pos[1] - 1]
-            elif tail_distance[1] == -2:
-                self.tail_pos = [self.head_pos[0], self.head_pos[1] + 1]
-            self.history.append({"head_pos": self.head_pos, "tail_pos": self.tail_pos})
-    def get_tails_pos_count(self):
-        tail_pos_history = [str(x["tail_pos"]) for x in self.history]
+            self.tails_pos[0] = self.head_pos
+            for t in range(1, self.tails_count+1):
+                tail_distance = (self.tails_pos[t-1][0]-self.tails_pos[t][0], self.tails_pos[t-1][1]-self.tails_pos[t][1])
+                if tail_distance[0] == 2:
+                    self.tails_pos[t] = [self.tails_pos[t-1][0] - 1, self.tails_pos[t-1][1]]
+                elif tail_distance[0] == -2:
+                    self.tails_pos[t] = [self.tails_pos[t-1][0] + 1, self.tails_pos[t-1][1]]
+                elif tail_distance[1] == 2:
+                    self.tails_pos[t] = [self.tails_pos[t-1][0], self.tails_pos[t-1][1] - 1]
+                elif tail_distance[1] == -2:
+                    self.tails_pos[t] = [self.tails_pos[t-1][0], self.tails_pos[t-1][1] + 1]
+            self.tail_pos = self.tails_pos[1]
+            status = {}
+            status["head_pos"] = self.head_pos
+            status["tail_pos"] = self.tail_pos
+            for t in range(self.tails_count+1):
+                status[f"tail{t}_pos"] = self.tails_pos[t]
+            self.history.append(status)
+    def get_tail_positions_count(self, tail_num = 1):
+        tail_pos_history = [str(x[f"tail{tail_num}_pos"]) for x in self.history]
         tail_pos_set = set(tail_pos_history)
         return len(tail_pos_set)
 
@@ -48,11 +60,14 @@ def sol1(input):
     for line in input:
         dir, steps = line.split()
         rope.move(dir, int(steps))
-    # print(rope.history)
-    return rope.get_tails_pos_count()
+    return rope.get_tail_positions_count()
 
 def sol2(input):
-    pass
+    rope = Rope()
+    for line in input:
+        dir, steps = line.split()
+        rope.move(dir, int(steps))
+    return rope.get_tail_positions_count(9)
 
 if __name__ == "__main__":
     input = read_input(f"{get_folder_name()}/input")
