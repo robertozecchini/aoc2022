@@ -14,6 +14,46 @@ def get_wood(input):
         wood.append(row)
     return wood
 
+def get_viewing_distance(wood, x, y, dir):
+    total = 0
+    x_len = len(wood[0])
+    y_len = len(wood)
+    if dir == "N":
+        for i in range(y-1, -1, -1):
+            if wood[i][x] >= wood[y][x]:
+                total += 1
+                break
+            else:
+                total += 1
+    elif dir == "E":
+        for i in range(x+1, x_len, 1):
+            if wood[y][i] >= wood[y][x]:
+                total += 1
+                break
+            else:
+                total += 1
+    elif dir == "S":
+        for i in range(y+1, y_len, 1):
+            if wood[i][x] >= wood[y][x]:
+                total += 1
+                break
+            else:
+                total += 1
+    elif dir == "W":
+        for i in range(x-1, -1, -1):
+            if wood[y][i] >= wood[y][x]:
+                total += 1
+                break
+            else:
+                total += 1
+    return total
+
+def get_scenic_score(wood, x, y):
+    score = 1
+    for dir in ("N", "S", "W", "E"):
+        score *= get_viewing_distance(wood, x, y, dir)
+    return score
+
 def sol1(input):
     wood = get_wood(input)
     # print(wood)
@@ -58,7 +98,14 @@ def sol1(input):
 
 
 def sol2(input):
-    pass
+    wood = get_wood(input)
+    winning_score = 0
+    for y, row in enumerate(wood):
+        for x, el in enumerate(row):
+            score = get_scenic_score(wood, x, y)
+            if score > winning_score:
+                winning_score = score
+    return winning_score
 
 if __name__ == "__main__":
     input = read_input(f"{get_folder_name()}/input")
