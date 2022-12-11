@@ -8,7 +8,7 @@ def get_folder_name():
     return folders[-2]
 
 def sol1(input):
-    cycle = 0
+    cycle = 1
     x = 1
     val_to_add = 0
     cycles_to_consider = [20, 60, 100, 140, 180, 220]
@@ -22,7 +22,7 @@ def sol1(input):
         elif args[0] == "addx":
             cycle += 2
             val_to_add = int(args[1])
-        if cycle >= cycles_to_consider[0]:
+        if cycle > cycles_to_consider[0]:
             results.append(x*cycles_to_consider[0])
             # print(f"{cycles_to_consider[0]} {x} {x*cycles_to_consider[0]}")
             cycles_to_consider.pop(0)
