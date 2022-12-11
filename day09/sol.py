@@ -9,11 +9,11 @@ def get_folder_name():
 
 class Rope:
     def __init__(self):
-        self.tails_count = 9
+        self.knots = 10
         self.head_pos = [0, 0]
         self.tail_pos = [0, 0]
         self.tails_pos = []
-        for i in range(self.tails_count+1):
+        for i in range(self.knots):
             self.tails_pos.append([0, 0])
         self.history = []
     def translate_dir(self, dir_str):
@@ -28,26 +28,32 @@ class Rope:
         else:
             print("pay attention: invalid move")
             return (0,0)
+    def sign(self, i):
+        if i > 0:
+            return 1
+        elif i < 0:
+            return -1
+        else:
+            return 0
+    def get_tail_position(self, head_pos, tail_pos):
+        x_dist = head_pos[0] - tail_pos[0]
+        y_dist = head_pos[1] - tail_pos[1]
+        if abs(x_dist) == 2 or abs(y_dist) == 2:
+            return [tail_pos[0] + self.sign(x_dist), tail_pos[1] + self.sign(y_dist)]
+        else:
+            return tail_pos
     def move(self, dir_str, steps = 1):
         dir = self.translate_dir(dir_str)
         for i in range(steps):
             self.head_pos = [self.head_pos[0] + dir[0], self.head_pos[1] + dir[1]]
             self.tails_pos[0] = self.head_pos
-            for t in range(1, self.tails_count+1):
-                tail_distance = (self.tails_pos[t-1][0]-self.tails_pos[t][0], self.tails_pos[t-1][1]-self.tails_pos[t][1])
-                if tail_distance[0] == 2:
-                    self.tails_pos[t] = [self.tails_pos[t-1][0] - 1, self.tails_pos[t-1][1]]
-                elif tail_distance[0] == -2:
-                    self.tails_pos[t] = [self.tails_pos[t-1][0] + 1, self.tails_pos[t-1][1]]
-                elif tail_distance[1] == 2:
-                    self.tails_pos[t] = [self.tails_pos[t-1][0], self.tails_pos[t-1][1] - 1]
-                elif tail_distance[1] == -2:
-                    self.tails_pos[t] = [self.tails_pos[t-1][0], self.tails_pos[t-1][1] + 1]
+            for t in range(1, self.knots):
+                self.tails_pos[t] = self.get_tail_position(self.tails_pos[t-1], self.tails_pos[t])
             self.tail_pos = self.tails_pos[1]
             status = {}
             status["head_pos"] = self.head_pos
             status["tail_pos"] = self.tail_pos
-            for t in range(self.tails_count+1):
+            for t in range(self.knots):
                 status[f"tail{t}_pos"] = self.tails_pos[t]
             self.history.append(status)
     def get_tail_positions_count(self, tail_num = 1):
