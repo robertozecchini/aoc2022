@@ -14,9 +14,9 @@ class TestSol(unittest.TestCase):
     def test_sol1(self):
         result = sol1(self.input)
         self.assertEqual(result, self.expected1)
-    def test_sol2(self):
-        result = sol2(self.input)
-        self.assertEqual(result, self.expected2)
+    # def test_sol2(self):
+    #     result = sol2(self.input)
+    #     self.assertEqual(result, self.expected2)
 
 if __name__ == '__main__':
     unittest.main()
