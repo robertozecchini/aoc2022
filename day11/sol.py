@@ -16,7 +16,7 @@ class Monkey:
         self.next_true = 0
         self.next_false = 0
         self.inspections_counter = 0
-    def play_turn(self, monkeys):
+    def play_turn(self, monkeys, worried = False):
         for el in self.items:
             self.inspections_counter += 1
             if self.operation[0] == "old":
@@ -34,7 +34,8 @@ class Monkey:
             else:
                 print(f"Invalid operation {self.operation}")
                 val = 0
-            val //= 3
+            if worried == False:
+                val //= 3
             if val % self.divisible == 0:
                 monkeys[self.next_true].items.append(val)
             else:
@@ -76,7 +77,16 @@ def sol1(input):
 
 
 def sol2(input):
-    pass
+    monkeys = parse_input(input)
+    # for monkey in monkeys:
+    #     print(monkey.index)
+    for round in range (1, 10000+1):
+        for monkey in monkeys:
+            monkey.play_turn(monkeys, worried = True)
+    active_scores = [monkey.inspections_counter for monkey in monkeys]
+    active_scores.sort(reverse = True)
+    # print(active_scores)
+    return active_scores[0] * active_scores[1]
 
 if __name__ == "__main__":
     input = read_input(f"{get_folder_name()}/input")
